@@ -59,23 +59,84 @@ board.on("ready", function () {
       autoAck: true
     });
 
-    var led = new five.Led.RGB([6,5,3]);
-    led.on();
-    led.color("#FFFFFF");
-
     subscription.on("message", function(message) {
+      var led_70 = new five.Led(2);
+      var led_73 = new five.Led(3);
+      var led_76 = new five.Led(4);
+      var led_79 = new five.Led(5);
+      var led_82 = new five.Led(6);
+      var led_85 = new five.Led(7);
+      var led_88 = new five.Led(8);
+
       var msgJson = message.data;
-      if (msgJson.temperature > 80.0) {
-        led.color("#FF0000")
+      if (msgJson.temperature > 70.0) {
+        led_70.on();
       }
       else {
-        led.color("#00FF00");
+        led_70.off();
       }
+
+      if (msgJson.temperature > 73.0) {
+        led_73.on();
+      }
+      else {
+        led_73.off();
+      }
+
+      if (msgJson.temperature > 76.0) {
+        led_76.on();
+      }
+      else {
+        led_76.off();
+      }
+
+      if (msgJson.temperature > 79.0) {
+        led_79.on();
+      }
+      else {
+        led_79.off();
+      }
+
+      if (msgJson.temperature > 82.0) {
+        led_82.on();
+      }
+      else {
+        led_82.off();
+      }
+
+      if (msgJson.temperature > 85.0) {
+        led_85.on();
+      }
+      else {
+        led_85.off();
+      }
+
+      if (msgJson.temperature > 88.0) {
+        led_88.on();
+      }
+      else {
+        led_88.off();
+      }
+
     });
 });
 
 // 
 board.on("exit", function() {
-    var led = new five.Led.RGB([6,5,3]);
-    led.off();
+
+    var led_70 = new five.Led(2);
+    var led_73 = new five.Led(3);
+    var led_76 = new five.Led(4);
+    var led_79 = new five.Led(5);
+    var led_82 = new five.Led(6);
+    var led_85 = new five.Led(7);
+    var led_88 = new five.Led(8);
+  
+    led_70.off();
+    led_73.off();
+    led_76.off();
+    led_79.off();
+    led_82.off();
+    led_85.off();
+    led_88.off();
 });
