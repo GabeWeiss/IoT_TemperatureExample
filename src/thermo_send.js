@@ -19,6 +19,7 @@ var jwt = require('jsonwebtoken');
 var mqtt = require('mqtt');
 var fs = require('fs');
 var program = require('commander');
+var SevenSegment = require('node-led').SevenSegment;
 
 // https://www.npmjs.com/package/commander
 program.description('The receiving end for the temperature/fan with device example')
@@ -91,14 +92,34 @@ board.on("ready", function () {
       var client = mqtt.connect(connectionArgs);
       var tmpJson = `{"temperature": ${temp}}`;
 
+      var opts = {
+        address: 0x70
+      };
+      var display = new SevenSegment(board, opts);
+      display.writeText(temp);
+
+
       client.on("connect", function() {
-
-          // debugging just to know it's working
-          console.log(tmpJson);
-
-          client.publish(mqttTopic, tmpJson, { qos: 1 });
+//          client.publish(mqttTopic, tmpJson, { qos: 1 });
+          client.end();
+      });
+      client.on("error", function(error) {
+          console.log(error);
+          var opts = {
+            address: 0x70
+          };
+          var display = new SevenSegment(board, opts);
+          display.clearDisplay();
           client.end();
       });
     });
   });
+});
+
+board.on("exit", function () {
+    var opts = {
+      address: 0x70
+    };
+    var display = new SevenSegment(board, opts);
+    display.clearDisplay();
 });
