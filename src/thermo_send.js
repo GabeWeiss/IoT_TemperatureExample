@@ -104,22 +104,26 @@ board.on("ready", function () {
           client.end();
       });
       client.on("error", function(error) {
-          console.log(error);
 
-          connectionArgs = {
-            host: "mqtt.googleapis.com",
-            port: 8883,
-            clientId: mqttClientId,
-            username: 'unused',
-            password: createJwt(),
-            protocol: 'mqtts'
-          };
+          if (error.message.indexOf("Error: Connection refused: Bad username or password" !== -1)) {
+              connectionArgs = {
+                host: "mqtt.googleapis.com",
+                port: 8883,
+                clientId: mqttClientId,
+                username: 'unused',
+                password: createJwt(),
+                protocol: 'mqtts'
+              };
+          }
+          else {
+              console.log(error);
 
-          var opts = {
-            address: 0x70
-          };
-          var display = new SevenSegment(board, opts);
-          display.clearDisplay();
+              var opts = {
+                address: 0x70
+              };
+              var display = new SevenSegment(board, opts);
+              display.clearDisplay();
+          }
           client.end();
       });
     });
