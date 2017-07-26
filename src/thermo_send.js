@@ -50,7 +50,7 @@ if (!program.device_port)
 function createJwt () {
   const token = {
     'iat': parseInt(Date.now() / 1000),
-    'exp': parseInt(Date.now() / 1000) + 20 * 60,  // 20 minutes
+    'exp': parseInt(Date.now() / 1000) + 60 * 60,  // 1 hour
     'aud': program.project_id
   };
   const privateKey = fs.readFileSync(program.ssh_public_key);
@@ -58,7 +58,7 @@ function createJwt () {
 }
 
 const mqttClientId = `projects/${program.project_id}/locations/${program.cloud_region}/registries/${program.registry_id}/devices/${program.device_id}`;
-const connectionArgs = {
+var connectionArgs = {
     host: "mqtt.googleapis.com",
     port: 8883,
     clientId: mqttClientId,
@@ -105,6 +105,16 @@ board.on("ready", function () {
       });
       client.on("error", function(error) {
           console.log(error);
+
+          connectionArgs = {
+            host: "mqtt.googleapis.com",
+            port: 8883,
+            clientId: mqttClientId,
+            username: 'unused',
+            password: createJwt(),
+            protocol: 'mqtts'
+          };
+
           var opts = {
             address: 0x70
           };
