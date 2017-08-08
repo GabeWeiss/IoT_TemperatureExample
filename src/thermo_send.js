@@ -30,6 +30,7 @@ program.description('The receiving end for the temperature/fan with device examp
   .option('--ssh_public_key <ssh_public_key>', 'Path to the public key file')
   .option('--ssh_algorithm <ssh_algorithm>', 'Encoding algorithm for the SSH key', 'RS256')
   .option('--device_port <device_port>', 'If device is plugged in, what port is it plugged into. Included for johnny-five implementation.')
+  .option('--deploy_room_temperature', 'Instead of the normal demo reporting, this puts the script into room temperature mode to broadcast current room temperature')
   .parse(process.argv);
 
 // fail out if we don't have any of our required args.
@@ -100,7 +101,7 @@ board.on("ready", function () {
 
 
       client.on("connect", function() {
-//          client.publish(mqttTopic, tmpJson, { qos: 1 });
+          client.publish(mqttTopic, tmpJson, { qos: 1 });
           client.end();
       });
       client.on("error", function(error) {
