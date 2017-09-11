@@ -91,7 +91,7 @@ board.on("ready", function () {
     temperature.on("change", function() {
       var temp = this.F;
       var client = mqtt.connect(connectionArgs);
-      var tmpJson = `{"temperature": ${temp}}`;
+      var tmpJson = `{"temperature": ${temp}, "ts": ${Date.now()}}`;
 
       var opts = {
         address: 0x70
